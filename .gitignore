@@ -1,0 +1,16 @@
+# Личные файлы фаервола (не для публикации)
+firewall.py
+Firewall.ps1
+firewall_manager.log
+firewall_block_state.txt
+firewall_block_bt.txt
+CLAUDE.md
+*.lnk
+
+# Резервная копия старого файла сборки внутри android-monitor (не нужен)
+android-monitor/.github/
+
+# Артефакты сборки Android
+android-monitor/app/build/
+android-monitor/.gradle/
+android-monitor/build/

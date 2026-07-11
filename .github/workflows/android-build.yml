@@ -1,0 +1,38 @@
+name: Build Android APK
+
+# Проект Android лежит в подпапке android-monitor. Собирает APK в облаке.
+# Готовый APK: вкладка Actions -> запуск -> Artifacts -> GuardMonitor-debug-apk.
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install SDK packages
+        run: yes | sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" || true
+
+      - name: Download Gradle 8.2
+        run: |
+          wget -q https://services.gradle.org/distributions/gradle-8.2-bin.zip
+          unzip -q gradle-8.2-bin.zip
+
+      - name: Build debug APK
+        working-directory: android-monitor
+        run: ../gradle-8.2/bin/gradle assembleDebug --no-daemon --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GuardMonitor-debug-apk
+          path: android-monitor/app/build/outputs/apk/debug/*.apk
